@@ -1,5 +1,7 @@
+
 import Table from "./_components/Table";
 import Form from "./_components/Form";
+import Search from "./_components/Search";
 
 export default function Page() {
   return (
@@ -9,7 +11,7 @@ export default function Page() {
           <h1 className="text-4xl font-bold text-slate-900 mb-2">Welcome to your Almirah!</h1>
           <p className="text-lg text-slate-600">Check out your clothes!</p>
         </div>
-        
+        <Search />
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
             <div className="bg-white rounded-lg shadow-md p-6">
