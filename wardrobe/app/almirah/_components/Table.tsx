@@ -7,7 +7,7 @@ export default function Table() {
         const controller = new AbortController();
         const getClothes = async () => {
             try {
-                const result = await fetch("http://localhost:8080/api/items", {signal: controller.signal});
+                const result = await fetch("https://closet-fwdyf8ehhtfcfra9.eastasia-01.azurewebsites.net/api/items", {signal: controller.signal});
                 const data = await result.json();
                 console.log("Fetched clothes data:", data);
                 setClothes(data);

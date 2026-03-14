@@ -19,7 +19,7 @@ export default function Search() {
         const controller = new AbortController();
         const timeout = setTimeout(async () => {
             try {
-                const res = await fetch("http://localhost:8080/api/items", { signal: controller.signal });
+                const res = await fetch("https://closet-fwdyf8ehhtfcfra9.eastasia-01.azurewebsites.net/api/items", { signal: controller.signal });
                 const data = await res.json();
                 setFiltered(filterItems(data, search));
             } catch (err) {
