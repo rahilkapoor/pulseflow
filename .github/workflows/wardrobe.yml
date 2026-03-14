@@ -31,11 +31,31 @@ jobs:
         working-directory: ./wardrobe
         run: npm run build
 
+      - name: Clean up unnecessary files
+        working-directory: ./wardrobe
+        run: |
+          rm -rf .next/.cache
+          rm -rf node_modules/.cache
+
+      - name: Create deployment package
+        run: |
+          cd ./wardrobe
+          # Keep only essential files for production
+          rm -rf .git .gitignore .next/.cache
+          # Copy node_modules for deployment
+          cd ..
+          tar -czf wardrobe-deploy.tar.gz \
+            wardrobe/package.json \
+            wardrobe/package-lock.json \
+            wardrobe/.next \
+            wardrobe/public \
+            wardrobe/node_modules
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: wardrobe-app
-          path: ./wardrobe
+          path: wardrobe-deploy.tar.gz
 
   deploy:
     runs-on: ubuntu-latest
@@ -51,6 +71,11 @@ jobs:
         with:
           name: wardrobe-app
 
+      - name: Extract deployment package
+        run: |
+          tar -xzf wardrobe-deploy.tar.gz
+          rm wardrobe-deploy.tar.gz
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -63,4 +88,4 @@ jobs:
         with:
           app-name: wardrobe
           slot-name: Production
-          package: .
+          package: ./wardrobe
