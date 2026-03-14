@@ -1,7 +1,7 @@
 # ⚡ PulseFlow
 
 **PulseFlow** is a high-performance, enterprise-grade, fully decoupled full-stack application. It combines a modern dashboard for content management with a robust backend API, powered by AI-driven insights and scalable event-driven architecture. Designed for cloud-native deployment with Kubernetes, SSO authentication, and load balancing.
-
+ 
 ---
 
 ## 🏗️ System Architecture
