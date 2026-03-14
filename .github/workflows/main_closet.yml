@@ -6,7 +6,10 @@ name: Build and deploy JAR app to Azure Web App - closet
 on:
   push:
     branches:
-      - main
+      - deploy/closet
+  pull_request:
+    branches:
+      - deploy/closet
   workflow_dispatch:
 
 jobs:

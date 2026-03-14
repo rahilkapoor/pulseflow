@@ -3,7 +3,10 @@ name: Build and deploy Node.js app to Azure Web App - wardrobe
 on:
   push:
     branches:
-      - main
+      - deploy/wardrobe
+  pull_request:
+    branches:
+      - deploy/wardrobe
   workflow_dispatch:
 
 jobs:
@@ -12,6 +15,21 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: ./wardrobe/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./wardrobe
+        run: npm install
+
+      - name: Build Next.js app
+        working-directory: ./wardrobe
+        run: npm run build
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
