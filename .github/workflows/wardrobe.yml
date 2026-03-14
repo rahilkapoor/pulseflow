@@ -40,16 +40,16 @@ jobs:
       - name: Create deployment package
         run: |
           cd ./wardrobe
-          # Keep only essential files for production
-          rm -rf .git .gitignore .next/.cache
-          # Copy node_modules for deployment
+          # Clean up unnecessary files
+          rm -rf .next/.cache node_modules/.cache
           cd ..
-          tar -czf wardrobe-deploy.tar.gz \
-            wardrobe/package.json \
-            wardrobe/package-lock.json \
-            wardrobe/.next \
-            wardrobe/public \
-            wardrobe/node_modules
+          # Create tarball with all necessary files including node_modules
+          tar --exclude='wardrobe/.git' \
+            --exclude='wardrobe/.gitignore' \
+            --exclude='wardrobe/.env.local' \
+            --exclude='wardrobe/.env' \
+            --exclude='wardrobe/.*' \
+            -czf wardrobe-deploy.tar.gz wardrobe/
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
