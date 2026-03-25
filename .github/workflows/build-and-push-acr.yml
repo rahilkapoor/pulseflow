@@ -10,9 +10,9 @@ jobs:
     strategy:
       matrix:
         service:
-          - name: closet
-            dockerfile: ./closet/Dockerfile
-            context: ./closet
+          # - name: closet
+          #   dockerfile: ./closet/Dockerfile
+          #   context: ./closet
           - name: wardrobe
             dockerfile: ./wardrobe/Dockerfile
             context: ./wardrobe
