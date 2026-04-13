@@ -23,10 +23,6 @@ yarn-error.log
 jest.config.js
 jest.setup.js
 eslint.config.mjs
-postcss.config.mjs
-tsconfig.json
-next.config.ts
-.gitignore
 Dockerfile
 .dockerignore
 docker-compose.yml
