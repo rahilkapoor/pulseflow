@@ -1,0 +1,82 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7-alpine
+    container_name: pulseflow-mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: closet
+    volumes:
+      - mongodb_data:/data/db
+    healthcheck:
+      test: mongosh --eval 'db.adminCommand("ping")'
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - containernetwork
+    restart: unless-stopped
+
+  closet:
+    build:
+      context: ./closet
+      dockerfile: Dockerfile
+      args:
+        BUILD_DATE: ${BUILD_DATE:-}
+    image: closetimage
+    container_name: closetcontainer
+    ports:
+      - "8080:8080"
+    environment:
+      MONGODB_URI: mongodb://mongodb:27017/closet
+      JAVA_OPTS: "-Xmx256m -Xms128m -XX:+UseG1GC -XX:MaxGCPauseMillis=200"
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - containernetwork
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    expose:
+      - "8080"
+
+  wardrobe:
+    build:
+      context: ./wardrobe
+      dockerfile: Dockerfile
+    image: wardrobeimage
+    container_name: wardrobecontainer
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_BASE_URL: http://closetcontainer:8080
+      NODE_ENV: production
+    depends_on:
+      closet:
+        condition: service_healthy
+    networks:
+      - containernetwork
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    restart: unless-stopped
+    expose:
+      - "3000"
+
+volumes:
+  mongodb_data:
+    driver: local
+
+networks:
+  containernetwork:
+    driver: bridge

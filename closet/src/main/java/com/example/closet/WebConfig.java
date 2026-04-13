@@ -11,8 +11,9 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins(
-                        "http://localhost:3000",           // Local development
-                        "http://127.0.0.1:3000",          // Local development (alternative)
+                        "http://localhost:3000",                    // Local development
+                        "http://127.0.0.1:3000",                   // Development with containers
+                        "http://wardrobecontainer:3000",                     // Docker container self-reference
                         "https://wardrobe-bbbkgtbqc7e3fwc6.eastasia-01.azurewebsites.net" // Your deployed wardrobe frontend
                 )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
